@@ -53,7 +53,7 @@ angular.module("tjsModelViewer", [])
 
 						// Renderer
 						renderer = new THREE.WebGLRenderer();
-						renderer.setSize(window.innerWidth, window.innerHeight);
+						renderer.setSize(window.innerWidth/2, window.innerHeight/2);
 						elem[0].appendChild(renderer.domElement);
 
 						// Events
@@ -62,7 +62,7 @@ angular.module("tjsModelViewer", [])
 
 					//
 					function onWindowResize(event) {
-						renderer.setSize(window.innerWidth, window.innerHeight);
+						renderer.setSize(window.innerWidth/2, window.innerHeight/2);
 						camera.aspect = window.innerWidth / window.innerHeight;
 						camera.updateProjectionMatrix();
 					}
