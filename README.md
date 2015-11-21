@@ -1,4 +1,7 @@
 # 3Slice
 
-to run
+to run use:
+node server.js
+
+or:
 python -m SimpleHTTPServer

@@ -18,5 +18,11 @@
   "homepage": "https://github.com/2fdevs/angular-threejs#readme",
   "devDependencies": {
     "grunt": "^0.4.5"
+  },
+  "dependencies": {
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
   }
 }
