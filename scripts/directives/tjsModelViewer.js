@@ -1,7 +1,7 @@
 angular.module("tjsModelViewer", [])
 	.directive(
 		"tjsModelViewer",
-		[function () {
+		["$http", function ($http) {
 			return {
 				restrict: "E",
 				scope: {
@@ -22,16 +22,73 @@ angular.module("tjsModelViewer", [])
 					scope.$watch("assimpUrl", function(newValue, oldValue) {
 						if (newValue != oldValue) loadModel(newValue);
 					});
-
+					
+					function toArrayBuffer(buffer) {
+					  var ab = new ArrayBuffer(buffer.length);
+					  var view = new Uint8Array(ab);
+					  for (var i = 0; i < buffer.length; ++i) {
+					    view[i] = buffer[i];
+					  }
+					  return ab;
+					};
+					
+					// this is for reading local files
+					var reader = new FileReader();
+					reader.onload = function () {
+					  var stlReader, data;
+					 
+					  data = reader.result;
+					  stlReader = new StlReader();
+					  var res = stlReader.read(data);
+					 
+					  var geometry = new THREE.BufferGeometry();
+					  geometry.addAttribute('position', new THREE.BufferAttribute(res.vertices, 3));
+					  geometry.addAttribute('normal', new THREE.BufferAttribute(res.normals, 3));
+					  var material3 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.FlatShading } ) ;
+		        
+					  var mesh = new THREE.Mesh(geometry, material);
+							 
+					  if (previous) scene.remove(previous);
+					  scene.add(mesh);
+					  previous = mesh;
+					};
+ 
 					function loadModel(modelUrl) {
-						loader1.load(modelUrl, function (assimpjson) {
-							assimpjson.scale.x = assimpjson.scale.y = assimpjson.scale.z = 0.2;
-							assimpjson.updateMatrix();
-							if (previous) scene.remove(previous);
-							scene.add(assimpjson);
-
-							previous = assimpjson;
-						});
+						if (modelUrl && modelUrl.endsWith(".stl")) {
+							$http({
+							  method: 'GET',
+							  url: modelUrl
+							}).then(function successCallback(response) {
+								if (response) {
+									var stlReader = new StlReader();
+					                var res = stlReader.read(toArrayBuffer(response.data));
+				 
+									var geometry = new THREE.BufferGeometry();
+									//geometry.addAttribute('position', new THREE.BufferAttribute(res.vertices, 3));
+									//geometry.addAttribute('normal', new THREE.BufferAttribute(res.normals, 3));
+									//var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.FlatShading } ) ;
+						        
+									//var mesh = new THREE.Mesh(geometry, material);
+											 
+									//if (previous) {
+									//	scene.remove(previous);
+									//}
+									//scene.add(mesh);
+									//previous = mesh;
+					            }
+							  }, function errorCallback(response) {
+							    
+							  });
+						} else {
+							loader1.load(modelUrl, function (assimpjson) {
+								assimpjson.scale.x = assimpjson.scale.y = assimpjson.scale.z = 0.2;
+								assimpjson.updateMatrix();
+								if (previous) scene.remove(previous);
+								scene.add(assimpjson);
+	
+								previous = assimpjson;
+							});
+						}
 					}
 
 					loadModel(scope.assimpUrl);

@@ -1,0 +1,14 @@
+{
+  "name": "DataStream.js",
+  "homepage": "https://github.com/kig/DataStream.js",
+  "_release": "d211da9262",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d211da92622c7b9fa2080e06ac0e596f8721235f"
+  },
+  "_source": "https://github.com/kig/DataStream.js.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/kig/DataStream.js.git",
+  "_direct": true
+}

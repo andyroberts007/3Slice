@@ -1,0 +1,39 @@
+{
+  "name": "stl-reader",
+  "main": "stl-reader.js",
+  "version": "3.0.1",
+  "homepage": "https://github.com/tatx/stl-reader",
+  "authors": [
+    "Tathagata Chakraborty <tatx@me.com>"
+  ],
+  "description": "Library for parsing STL (Stereolithography) files into typed arrays for WebGL rendering",
+  "keywords": [
+    "stl",
+    "parser",
+    "reader",
+    "stereolithography"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "spec",
+    "DataStream.js",
+    "Gruntfile.js",
+    "karma.conf.js",
+    "package.json"
+  ],
+  "_release": "3.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.1",
+    "commit": "0e2e3a69b50296999547da39feeab3e94f1cc29c"
+  },
+  "_source": "git://github.com/tatchx/stl-reader.git",
+  "_target": "~3.0.1",
+  "_originalSource": "stl-reader",
+  "_direct": true
+}
