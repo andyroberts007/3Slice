@@ -1,0 +1,22 @@
+{
+  "name": "angular-threejs",
+  "version": "1.0.0",
+  "description": "three.js wrapped in angular",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2fdevs/angular-threejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2fdevs/angular-threejs/issues"
+  },
+  "homepage": "https://github.com/2fdevs/angular-threejs#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  }
+}
