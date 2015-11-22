@@ -32,7 +32,7 @@ angular.module("tjsModelViewer", [])
 					  return ab;
 					};
 					
-					// this is for reading local files
+					// this is for reading local files and parsing stl on client - not currently used
 					var reader = new FileReader();
 					reader.onload = function () {
 					  var stlReader, data;
@@ -60,9 +60,7 @@ angular.module("tjsModelViewer", [])
 							  url: modelUrl
 							}).then(function successCallback(response) {
 								if (response) {
-									var stlReader = new StlReader();
-					                var res = stlReader.read(toArrayBuffer(response.data));
-				 
+									var data = response.data;
 									var geometry = new THREE.BufferGeometry();
 									//geometry.addAttribute('position', new THREE.BufferAttribute(res.vertices, 3));
 									//geometry.addAttribute('normal', new THREE.BufferAttribute(res.normals, 3));
