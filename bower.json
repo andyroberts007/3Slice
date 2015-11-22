@@ -1,0 +1,37 @@
+{
+  "name": "3Slicer",
+  "description": "slicer for stl files",
+  "main": "index.js",
+  "authors": [
+    "andyroberts007 <andyroberts007@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/andyroberts007/3Slice",
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "~1.0.7",
+    "angular-resource": "~1.0.7",
+    "angular-mocks": "~1.0.7",
+    "angular-sanitize": "~1.0.7",
+    "angular-scenario": "~1.0.7",
+    "DataStream.js": "https://github.com/kig/DataStream.js.git",
+    "es5-shim": "~2.0.8",
+    "jquery": "~2.1.4",
+    "json3": "~3.2.4",
+    "three.js": "*",
+    "stl-reader": "~3.0.1",
+    "threejs": "*"
+  }
+}

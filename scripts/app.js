@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularjsThreejsApp', ["tjsModelViewer"])
+angular.module('3SliceApp', ["modelViewer"])
 	.config(function ($routeProvider) {
 		$routeProvider
 			.when('/', {

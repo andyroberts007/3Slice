@@ -158,11 +158,11 @@ THREE.AssimpJSONLoader.prototype = {
 		}
 
 
-		geometry.computeCentroids();
+		//geometry.computeCentroids();
 		//geometry.computeFaceNormals();
 		//geometry.computeVertexNormals();
 		//geometry.computeTangents();
-		geometry.computeBoundingSphere();
+		//geometry.computeBoundingSphere();
 
 		// TODO: tangents
 		return geometry;
@@ -243,7 +243,7 @@ THREE.AssimpJSONLoader.prototype = {
 				init_props.specular = toColor(prop.value);
 			}
 			else if(prop.key === '$clr.ambient') {
-				init_props.ambient = toColor(prop.value);
+				//init_props.ambient = toColor(prop.value);
 			}
 			else if(prop.key === '$clr.emissive') {
 				init_props.emissive = toColor(prop.value);
@@ -260,7 +260,7 @@ THREE.AssimpJSONLoader.prototype = {
 		}
 
 		if(!init_props.ambient) {
-			init_props.ambient = init_props.color;
+			//init_props.ambient = init_props.color;
 		}
 
 		// note: three.js does not like it when a texture is added after the geometry

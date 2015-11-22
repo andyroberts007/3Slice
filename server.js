@@ -2,8 +2,10 @@ var http = require("http"),
     url = require("url"),
     path = require("path"),
     fs = require("fs"),
-    qs = require('querystring'),
-    stlReader = require('stl-reader'),
+    qs = require("querystring"),
+    stlModels = require('stl-models'),
+    stlReader = require("stl-reader"),
+    slicer = require("./slicer.js"),
     port = process.argv[2] || 8090;
 
 function toArrayBuffer(buffer) {
@@ -33,34 +35,41 @@ http.createServer(function(request, response) {
         });
     } else {
 	  	var uri = url.parse(request.url).pathname;
-	  	var filename = path.join(process.cwd(), uri);
+	  	if (uri.endsWith(".stl")) {
+	  		stlModels.getByPath(uri).then(function(file) {
+				var ab = toArrayBuffer(file);
+	    		var meshData = new stlReader().read(ab);
+	  			var mesh = new slicer.Mesh();
+	  			mesh.init(meshData);
+	  			response.writeHead(200);
+		      	response.write(JSON.stringify(mesh.toJson()), "binary");
+		      	response.end();
+			});
+	  	} else {
+	  		var filename = path.join(process.cwd(), uri);
+	  		fs.exists(filename, function(exists) {
+		    	if(!exists) {
+		      		response.writeHead(404, {"Content-Type": "text/plain"});
+		      		response.write("404 Not Found\n");
+		      		response.end();
+		      		return;
+		    	}
+		    	if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+		    	fs.readFile(filename, "binary", function(err, file) {
+		      		if(err) {        
+		        		response.writeHead(500, {"Content-Type": "text/plain"});
+		        		response.write(err + "\n");
+		        		response.end();
+		        		return;
+		      		}
+		      		response.writeHead(200);
+		      		response.write(file, "binary");
+		      		response.end();
+		    	});
+		  	});
+	  	}
 		
-		fs.exists(filename, function(exists) {
-	    	if(!exists) {
-	      		response.writeHead(404, {"Content-Type": "text/plain"});
-	      		response.write("404 Not Found\n");
-	      		response.end();
-	      		return;
-	    	}
-	    	if (fs.statSync(filename).isDirectory()) filename += '/index.html';
-			fs.readFile(filename, "binary", function(err, file) {
-	      		if(err) {        
-	        		response.writeHead(500, {"Content-Type": "text/plain"});
-	        		response.write(err + "\n");
-	        		response.end();
-	        		return;
-	      		}
-	      		var responseData = file;
-	      		if (filename.endsWith(".stl")) {
-	      			var ab = toArrayBuffer(file);
-	      			var a = 5;
-					//responseData = stlReader.read(ab);
-				}
-	      		response.writeHead(200);
-	      		response.write(responseData, "binary");
-	      		response.end();
-	    	});
-	  	});
+		
 	  }
 }).listen(parseInt(port, 10));
 

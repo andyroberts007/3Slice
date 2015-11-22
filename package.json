@@ -1,21 +1,21 @@
 {
-  "name": "angular-threejs",
+  "name": "3Slice",
   "version": "1.0.0",
-  "description": "three.js wrapped in angular",
+  "description": "slicer for stl files",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/2fdevs/angular-threejs.git"
+    "url": "git+https://github.com/andyroberts007/3Slice.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/2fdevs/angular-threejs/issues"
+    "url": "https://github.com/andyroberts007/3Slice/issues"
   },
-  "homepage": "https://github.com/2fdevs/angular-threejs#readme",
+  "homepage": "https://github.com/andyroberts007/3Slice#readme",
   "devDependencies": {
     "grunt": "^0.4.5"
   },
