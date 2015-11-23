@@ -4,7 +4,9 @@ This node app loads stl files on the server, generates a mesh and sends the vert
 
 The app uses angular and wraps three.js as a directive.
 
-![alt tag](https://raw.github.com/andyroberts007/3Slice/images/pump.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/pump.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/bunny.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/gearwheel.png)
 
 TODO:
 1.  serialize Float32Array values in binary form
