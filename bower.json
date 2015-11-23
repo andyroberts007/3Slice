@@ -31,7 +31,6 @@
     "jquery": "~2.1.4",
     "json3": "~3.2.4",
     "three.js": "*",
-    "stl-reader": "~3.0.1",
-    "threejs": "*"
+    "stl-reader": "~3.0.1"
   }
 }
