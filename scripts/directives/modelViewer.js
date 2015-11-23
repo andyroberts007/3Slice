@@ -10,9 +10,11 @@ angular.module("modelViewer", [])
 				link: function (scope, elem, attr) {
 				
 					var camera;
+					var cameraControls;
 					var scene;
 					var renderer;
 					var previous;
+					var clock = new THREE.Clock();
 
 					// init scene
 					init();
@@ -75,7 +77,9 @@ angular.module("modelViewer", [])
 									geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 									geometry.addAttribute('normal', new THREE.BufferAttribute(normals, 3));
 									var material1 = new THREE.MeshBasicMaterial({ color: 0xeeeedd, side: THREE.DoubleSide, shading: THREE.FlatShading, wireframe: false });
-        							var mesh = new THREE.Mesh(geometry, material1);
+        							var material2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.FlatShading } ) ;
+        
+        							var mesh = new THREE.Mesh(geometry, material2);
 											 
 									if (previous) {
 										scene.remove(previous);
@@ -102,23 +106,28 @@ angular.module("modelViewer", [])
 					animate();
 
 					function init() {
-						camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-						camera.position.set(2, 4, 5);
+						camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+						camera.position.set(20, 20, 20);
+						
 						scene = new THREE.Scene();
 						scene.fog = new THREE.FogExp2(0x000000, 0.035);
-						// Lights
-						scene.add(new THREE.AmbientLight(0xcccccc));
-						var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee);
-						directionalLight.position.x = Math.random() - 0.5;
-						directionalLight.position.y = Math.random() - 0.5;
-						directionalLight.position.z = Math.random() - 0.5;
-						directionalLight.position.normalize();
-						scene.add(directionalLight);
+				
+						var directionalLight1 = new THREE.DirectionalLight(0xeeee55);
+						directionalLight1.position.set( 0, 0.35, 0.5 ).normalize();
+						scene.add(directionalLight1);
+						var directionalLight2 = new THREE.DirectionalLight(0x55eeee);
+						directionalLight2.position.set( 0, -0.35, -0.5 ).normalize();
+						scene.add(directionalLight2);
+						var ambientLight = new THREE.AmbientLight( 0x444444 );
+    					scene.add( ambientLight );
 
 						// Renderer
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.7);
 						elem[0].appendChild(renderer.domElement);
+						
+						cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
+        				cameraControls.target.set(0, 0, 0);
 
 						// Events
 						window.addEventListener('resize', onWindowResize, false);
@@ -132,16 +141,18 @@ angular.module("modelViewer", [])
 
 					function animate() {
 						requestAnimationFrame(animate);
+						var delta = clock.getDelta();
+        				cameraControls.update(delta);
 						render();
 					}
 
 					//
 					function render() {
 						var timer = Date.now() * 0.0002;
-						camera.position.x = Math.cos(timer) * 30;
-						camera.position.y = 20;
-						camera.position.z = Math.sin(timer) * 30;
-						camera.lookAt(scene.position);
+						//camera.position.x = Math.cos(timer) * 30;
+						//camera.position.y = 20;
+						//camera.position.z = Math.sin(timer) * 30;
+						//camera.lookAt(scene.position);
 						renderer.render(scene, camera);
 					}
 				}

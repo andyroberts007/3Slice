@@ -8,8 +8,6 @@ angular.module('3SliceApp')
 			if ($scope.assimpModelUrl == "objects/gearwheel.ascii.stl") {
 				$scope.assimpModelUrl = "objects/pump.stl";
 			} else if ($scope.assimpModelUrl == "objects/pump.stl") {
-				$scope.assimpModelUrl = "objects/trefoil.stl";
-			} else if ($scope.assimpModelUrl == "objects/trefoil.stl") {
 				$scope.assimpModelUrl = "polytopes/cube.ascii.stl";
 			} else if ($scope.assimpModelUrl == "polytopes/cube.ascii.stl") {
 				$scope.assimpModelUrl = "objects/bunny.bin.stl";
