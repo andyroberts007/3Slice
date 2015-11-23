@@ -1,6 +1,6 @@
 # 3Slice
 
-This node app loads stl files on the server, generates a mesh and sends the vertices and normmals to the client for display in Three.js.
+This node app loads stl files on the server, generates a mesh and sends the vertices and normals to the client for display in Three.js.
 
 The app uses angular and wraps three.js as a directive.
 
