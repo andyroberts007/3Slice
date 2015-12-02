@@ -2,18 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98b1fce9-af06-4978-85f5-f7360db60a7e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/.npmignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/test/test.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/incremental-convex-hull/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/two-sum.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/.npmignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/test/test.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/simplicial-complex-contour/node_modules/marching-simplex-table/node_modules/convex-hull/node_modules/monotone-convex-hull-2d/node_modules/robust-orientation/node_modules/robust-scale/node_modules/two-sum/two-sum.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/.npmignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/.npmignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/.npmignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="3Slice.iws" />
@@ -424,7 +427,13 @@
       <option name="project" value="LOCAL" />
       <updated>1449093818142</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added simplicial modules after setting&#10;git config --system core.longpaths true">
+      <created>1449093897680</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1449093897680</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
