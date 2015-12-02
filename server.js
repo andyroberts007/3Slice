@@ -9,6 +9,7 @@ var http = require("http"),
     parseSTL = require('parse-stl'),
     computeNormals = require("normals"),
     extractContour = require('simplicial-complex-contour'),
+    boundary = require('simplicial-complex-boundary'),
     port = process.argv[2] || 8090;
 
 function toArrayBuffer(buffer) {
@@ -42,26 +43,44 @@ http.createServer(function(request, response) {
             var filename = path.join(process.cwd() + "/node_modules/stl-models/", uri);
             var buf = fs.readFileSync(filename);
             var mesh = parseSTL(buf);
+            mesh.vertexNormals = computeNormals.vertexNormals(mesh.cells, mesh.positions);
+            var sliceMesh = new slicer.Mesh();
+            sliceMesh.init(mesh.positions, mesh.vertexNormals);
+
+            var zMax = Number.MIN_VALUE;
+            var zMin = Number.MAX_VALUE;
             var zvalues = mesh.positions.map(function(p) {
+                if (p[2] > zMax) {
+                    zMax = p[2];
+                }
+                if (p[2] < zMin) {
+                    zMin = p[2];
+                }
                 return p[2]
             });
-            var curve = extractContour(mesh.cells, zvalues, 0);
-            var curveEdges = curve.cells;
-            var curvePositions = curve.vertexWeights.map(function(w,i) {
-                var a = mesh.positions[curve.vertexIds[i][0]]
-                var b = mesh.positions[curve.vertexIds[i][1]]
-                return [
-                    w * a[0] + (1 - w) * b[0],
-                    w * a[1] + (1 - w) * b[1],
-                    w * a[2] + (1 - w) * b[2]
-                ]
-            });
-            mesh.vertexNormals = computeNormals.vertexNormals(mesh.cells, mesh.positions);
-            var sm = new slicer.Mesh();
-            sm.init(mesh.positions, mesh.vertexNormals);
-            sm.addSlice(curvePositions);
+            sliceMesh.setBounds(zMin, zMax);
+            var zRange = Math.abs(zMax - zMin);
+            var sliceCount = 10;
+            var sliceThickness = zRange/sliceCount;
+
+            for (var i=0; i<sliceCount; i++) {
+                var zVal = zMin + i*sliceThickness;
+                var curve = extractContour(mesh.cells, zvalues, zVal);
+                var curveEdges = curve.cells;
+                var curvePositions = curve.vertexWeights.map(function (w, i) {
+                    var a = mesh.positions[curve.vertexIds[i][0]]
+                    var b = mesh.positions[curve.vertexIds[i][1]]
+                    return [
+                        w * a[0] + (1 - w) * b[0],
+                        w * a[1] + (1 - w) * b[1],
+                        w * a[2] + (1 - w) * b[2]
+                    ]
+                });
+                sliceMesh.addSlice(curveEdges, curvePositions, zVal);
+            }
+            
             response.writeHead(200);
-            response.write(JSON.stringify(sm.toJson()), "binary");
+            response.write(JSON.stringify(sliceMesh.toJson()), "binary");
             response.end();
 	  	} else {
 	  		var filename = path.join(process.cwd(), uri);

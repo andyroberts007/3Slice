@@ -12,14 +12,12 @@ angular.module("modelViewer", [])
                     if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
                     var camera, scene, renderer, dirLight, hemiLight, axes;
-                    var mixers = [];
                     var stats;
-
 					var cameraControls;
 					var previousMesh;
                     var previousSlices = [];
-
 					var clock = new THREE.Clock();
+                    var floor = -10;
 
 					// not used currently given the loadable models
 					var loader1 = new THREE.AssimpJSONLoader();
@@ -96,40 +94,41 @@ angular.module("modelViewer", [])
                                     // rotate mesh so Z is vertical
                                     mesh.rotation.x = -Math.PI/2;
                                     mesh.position.y = 0;
-
                                     mesh.castShadow = true;
                                     mesh.receiveShadow = true;
-
-
 
                                     for (var i=0; i<previousSlices.length; i++) {
                                         scene.remove(previousSlices[i]);
                                     }
                                     previousSlices = [];
+                                    var sliceMaterial = new THREE.LineBasicMaterial({
+                                        color: 0xff0000
+                                    });
+
                                     for (var i=0; i<slices.length; i++) {
-                                        var slicePoints = slices[i];
-                                        var sliceMaterial = new THREE.LineBasicMaterial({
-                                            color: 0xff0000
-                                        });
-                                        var sliceGeometry = new THREE.Geometry();
-                                        for (var j= 0; j<slicePoints.length; j++) {
-                                            var sp = slicePoints[j];
-                                            sliceGeometry.vertices.push(new THREE.Vector3(sp[0], sp[1], sp[2]));
+                                        var slice = slices[i];
+                                        var curveEdges = slice.curveEdges;
+                                        var curvePositions = slice.curvePositions;
+                                        for (var j= 0; j<curveEdges.length; j++) {
+                                            var sliceGeometry = new THREE.Geometry();
+                                            var curveEdge = curveEdges[j];
+                                            var index1 = curveEdge[0];
+                                            var index2 = curveEdge[1];
+                                            var cp1 = curvePositions[index1];
+                                            var v1 = new THREE.Vector3(cp1[0], cp1[1], cp1[2])
+                                            sliceGeometry.vertices.push(v1);
+                                            var cp2 = curvePositions[index2];
+                                            var v2 = new THREE.Vector3(cp2[0], cp2[1], cp2[2])
+                                            sliceGeometry.vertices.push(v2);
+                                            var sliceProfile = new THREE.Line(sliceGeometry, sliceMaterial);
+                                            // rotate mesh so Z is vertical
+                                            sliceProfile.rotation.x = -Math.PI/2;
+                                            previousSlices.push(sliceProfile);
+                                            scene.add(sliceProfile);
                                         }
-                                        var sliceProfile = new THREE.Line(sliceGeometry, sliceMaterial);
-                                        // rotate mesh so Z is vertical
-                                        sliceProfile.rotation.x = -Math.PI/2;
-                                        previousSlices.push(sliceProfile);
-                                        scene.add(sliceProfile);
                                     }
 
-                                    /*
-                                    var mixer = new THREE.AnimationMixer( mesh );
-                                    mixer.addAction( new THREE.AnimationAction( geometry.animations[ 0 ] ).warpToDuration( 1 ) );
-                                    mixers.push( mixer );
-                                    */
-
-									if (previousMesh) {
+                                    if (previousMesh) {
 										scene.remove(previousMesh);
 									}
 									scene.add(mesh);
@@ -144,22 +143,19 @@ angular.module("modelViewer", [])
 								assimpjson.updateMatrix();
 								if (previousMesh) scene.remove(previousMesh);
 								scene.add(assimpjson);
-	
 								previousMesh = assimpjson;
 							});
 						}
 					};
 
-                    function buildAxes( length ) {
+                    function buildAxes(length, floor) {
                         var axes = new THREE.Object3D();
                         axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
-                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
                         axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
-                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
-                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
-                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+                        //axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
                         // rotate axes so Z is vertical
                         axes.rotation.x = -Math.PI/2;
+                        axes.position.y = floor;
                         return axes;
                     };
 
@@ -197,46 +193,38 @@ angular.module("modelViewer", [])
                         dirLight.color.setHSL( 0.1, 1, 0.95 );
                         dirLight.position.set( -1, 1.75, 1 );
                         dirLight.position.multiplyScalar( 50 );
-                        scene.add( dirLight );
-
                         dirLight.castShadow = true;
-
                         dirLight.shadowMapWidth = 2048;
                         dirLight.shadowMapHeight = 2048;
-
                         var d = 50;
                         dirLight.shadowCameraLeft = -d;
                         dirLight.shadowCameraRight = d;
                         dirLight.shadowCameraTop = d;
                         dirLight.shadowCameraBottom = -d;
-
                         dirLight.shadowCameraFar = 3500;
                         dirLight.shadowBias = -0.0001;
-                        //dirLight.shadowCameraVisible = true;
+                        scene.add( dirLight );
 
                         var groundGeo1 = new THREE.PlaneBufferGeometry( 10000, 10000 );
                         var groundMat1 = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
                         groundMat1.color.setHSL( 0.095, 1, 0.75 );
-
                         var ground1 = new THREE.Mesh( groundGeo1, groundMat1 );
-                        // place ground normal to Z
+                        // rotate ground normal to Z
                         ground1.rotation.x = -Math.PI/2;
-                        ground1.position.y = -11;
+                        ground1.position.y = floor - 1;
                         scene.add( ground1 );
 
                         var groundGeo2 = new THREE.PlaneBufferGeometry( 100, 100 );
                         var groundMat2 = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
                         groundMat2.color.setHSL( 130, .09, .61 );
-
                         var ground2 = new THREE.Mesh( groundGeo2, groundMat2 );
-                        // place ground normal to Z
+                        // rotate ground normal to Z
                         ground2.rotation.x = -Math.PI/2;
-                        ground2.position.y = -10;
+                        ground2.position.y = floor;
                         scene.add( ground2 );
-
                         ground2.receiveShadow = true;
 
-                        axes = buildAxes( 50 );
+                        axes = buildAxes(50, floor);
                         scene.add( axes );
 
                         var vertexShader = document.getElementById( 'vertexShader' ).textContent;
@@ -253,67 +241,27 @@ angular.module("modelViewer", [])
 
                         var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
                         var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
-
                         var sky = new THREE.Mesh( skyGeo, skyMat );
                         scene.add( sky );
 
                         renderer = new THREE.WebGLRenderer( { antialias: true } );
                         renderer.setClearColor( scene.fog.color );
                         renderer.setPixelRatio( window.devicePixelRatio );
-                        renderer.setSize( window.innerWidth*0.7, window.innerHeight*0.7 );
-
+                        renderer.setSize( window.innerWidth*0.7, window.innerHeight*0.7);
                         renderer.gammaInput = true;
                         renderer.gammaOutput = true;
-
                         renderer.shadowMap.enabled = true;
                         renderer.shadowMap.cullFace = THREE.CullFaceBack;
 
                         elem[0].appendChild(renderer.domElement);
 
-                        // STATS
                         stats = new Stats();
                         elem[0].appendChild( stats.domElement );
 
-                        //cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
-                        cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
+                        cameraControls = new THREE.OrbitControls(camera, renderer.domElement, elem[0]);
                         cameraControls.target.set(0, 0, 0);
 
-                        // Events
                         window.addEventListener('resize', onWindowResize, false);
-
-
-
-                        /*
-                        camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-						camera.position.set(20, 20, 20);
-						
-						scene = new THREE.Scene();
-						scene.fog = new THREE.FogExp2(0x000000, 0.035);
-				
-						var directionalLight1 = new THREE.DirectionalLight(0xeeee55);
-						directionalLight1.position.set( 0, 0.35, 0.5 ).normalize();
-						scene.add(directionalLight1);
-						var directionalLight2 = new THREE.DirectionalLight(0x55eeee);
-						directionalLight2.position.set( 0, -0.35, -0.5 ).normalize();
-						scene.add(directionalLight2);
-						var ambientLight = new THREE.AmbientLight( 0x444444 );
-    					scene.add( ambientLight );
-
-						// Renderer
-						renderer = new THREE.WebGLRenderer();
-						renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.7);
-						elem[0].appendChild(renderer.domElement);
-
-                        // STATS
-                        stats = new Stats();
-                        elem[0].appendChild( stats.domElement );
-						
-						cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
-        				cameraControls.target.set(0, 0, 0);
-
-						// Events
-						window.addEventListener('resize', onWindowResize, false);
-						*/
 					}
 
 					function onWindowResize(event) {

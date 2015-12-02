@@ -1,6 +1,6 @@
 <div class="slicer">
 	<h1>3Slice</h1>
 	<model-viewer assimp-url="assimpModelUrl"></model-viewer><br/>
-	<button ng-click="changeModel()">change model</button>
+	<button ng-click="changeModel(); $event.stopPropagation();">change model</button>
 	<input ng-model="assimpModelUrl"></input>
 </div>
