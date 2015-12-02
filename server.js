@@ -6,6 +6,8 @@ var http = require("http"),
     stlModels = require('stl-models'),
     stlReader = require("stl-reader"),
     slicer = require("./slicer.js"),
+    parseSTL = require('parse-stl'),
+    extractContour = require('simplicial-complex-contour'),
     port = process.argv[2] || 8090;
 
 function toArrayBuffer(buffer) {
@@ -45,6 +47,15 @@ http.createServer(function(request, response) {
 		      	response.write(JSON.stringify(mesh.toJson()), "binary");
 		      	response.end();
 			});
+            var filename = path.join(process.cwd() + "/node_modules/stl-models/", uri);
+
+            var buf = fs.readFileSync(filename);
+            var mesh = parseSTL(buf);
+            var zvalues = mesh.positions.map(function(p) {
+                return p[2]
+            });
+            var curve = extractContour(mesh.cells, zvalues, 5.0);
+            var a = 5;
 	  	} else {
 	  		var filename = path.join(process.cwd(), uri);
 	  		fs.exists(filename, function(exists) {

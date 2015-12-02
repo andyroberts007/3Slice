@@ -8,16 +8,16 @@ angular.module("modelViewer", [])
 					assimpUrl: "=assimpUrl"
 				},
 				link: function (scope, elem, attr) {
-				
-					var camera;
+
+                    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+                    var camera, scene, renderer, dirLight, hemiLight, axes;
+                    var mixers = [];
+                    var stats;
+
 					var cameraControls;
-					var scene;
-					var renderer;
 					var previous;
 					var clock = new THREE.Clock();
-
-					// init scene
-					init();
 
 					// not used currently given the loadable models
 					var loader1 = new THREE.AssimpJSONLoader();
@@ -76,11 +76,26 @@ angular.module("modelViewer", [])
 									}
 									geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 									geometry.addAttribute('normal', new THREE.BufferAttribute(normals, 3));
-									var material1 = new THREE.MeshBasicMaterial({ color: 0xeeeedd, side: THREE.DoubleSide, shading: THREE.FlatShading, wireframe: false });
-        							var material2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.FlatShading } ) ;
-        
-        							var mesh = new THREE.Mesh(geometry, material2);
-											 
+
+                                    // use this vertexColors: THREE.FaceColors,
+                                    var material = new THREE.MeshPhongMaterial( { ambient: 0x555555, color: 0xffffff, specular: 0xffffff, shininess: 20, morphTargets: true, shading: THREE.FlatShading } );
+                                    var mesh = new THREE.Mesh( geometry, material );
+
+                                    var s = 1.0;
+                                    mesh.scale.set( s, s, s );
+                                    // rotate mesh so Z is vertical
+                                    mesh.rotation.x = -Math.PI/2;
+                                    mesh.position.y = 0;
+
+                                    mesh.castShadow = true;
+                                    mesh.receiveShadow = true;
+
+                                    /*
+                                    var mixer = new THREE.AnimationMixer( mesh );
+                                    mixer.addAction( new THREE.AnimationAction( geometry.animations[ 0 ] ).warpToDuration( 1 ) );
+                                    mixers.push( mixer );
+                                    */
+
 									if (previous) {
 										scene.remove(previous);
 									}
@@ -100,13 +115,133 @@ angular.module("modelViewer", [])
 								previous = assimpjson;
 							});
 						}
-					}
+					};
 
-					loadModel(scope.assimpUrl);
-					animate();
+                    function buildAxes( length ) {
+                        var axes = new THREE.Object3D();
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+                        axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+                        // rotate axes so Z is vertical
+                        axes.rotation.x = -Math.PI/2;
+                        return axes;
+                    };
+
+                    function buildAxis( src, dst, colorHex, dashed ) {
+                        var geom = new THREE.Geometry(),
+                            mat;
+                        if(dashed) {
+                            mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+                        } else {
+                            mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+                        }
+                        geom.vertices.push( src.clone() );
+                        geom.vertices.push( dst.clone() );
+                        geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+                        var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+                        return axis;
+                    };
+
 
 					function init() {
-						camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+                        camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 5000 );
+                        camera.position.set( 100, 30, 100 );
+
+                        scene = new THREE.Scene();
+                        scene.fog = new THREE.Fog( 0xffffff, 1, 5000 );
+                        scene.fog.color.setHSL( 0.6, 0, 1 );
+
+                        hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+                        hemiLight.color.setHSL( 0.6, 1, 0.6 );
+                        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+                        hemiLight.position.set( 0, 100, 0 );
+                        scene.add( hemiLight );
+
+                        dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+                        dirLight.color.setHSL( 0.1, 1, 0.95 );
+                        dirLight.position.set( -1, 1.75, 1 );
+                        dirLight.position.multiplyScalar( 50 );
+                        scene.add( dirLight );
+
+                        dirLight.castShadow = true;
+
+                        dirLight.shadowMapWidth = 2048;
+                        dirLight.shadowMapHeight = 2048;
+
+                        var d = 50;
+                        dirLight.shadowCameraLeft = -d;
+                        dirLight.shadowCameraRight = d;
+                        dirLight.shadowCameraTop = d;
+                        dirLight.shadowCameraBottom = -d;
+
+                        dirLight.shadowCameraFar = 3500;
+                        dirLight.shadowBias = -0.0001;
+                        //dirLight.shadowCameraVisible = true;
+
+                        var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
+                        var groundMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
+                        groundMat.color.setHSL( 0.095, 1, 0.75 );
+
+                        var ground = new THREE.Mesh( groundGeo, groundMat );
+                        // place ground normal to Z
+                        ground.rotation.x = -Math.PI/2;
+                        ground.position.y = -10;
+                        scene.add( ground );
+
+                        ground.receiveShadow = true;
+
+                        axes = buildAxes( 50 );
+                        scene.add( axes );
+
+                        var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+                        var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+                        var uniforms = {
+                            topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
+                            bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+                            offset:		 { type: "f", value: 33 },
+                            exponent:	 { type: "f", value: 0.6 }
+                        };
+                        uniforms.topColor.value.copy( hemiLight.color );
+
+                        scene.fog.color.copy( uniforms.bottomColor.value );
+
+                        var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
+                        var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+
+                        var sky = new THREE.Mesh( skyGeo, skyMat );
+                        scene.add( sky );
+
+                        renderer = new THREE.WebGLRenderer( { antialias: true } );
+                        renderer.setClearColor( scene.fog.color );
+                        renderer.setPixelRatio( window.devicePixelRatio );
+                        renderer.setSize( window.innerWidth*0.7, window.innerHeight*0.7 );
+
+                        renderer.gammaInput = true;
+                        renderer.gammaOutput = true;
+
+                        renderer.shadowMap.enabled = true;
+                        renderer.shadowMap.cullFace = THREE.CullFaceBack;
+
+                        elem[0].appendChild(renderer.domElement);
+
+                        // STATS
+                        stats = new Stats();
+                        elem[0].appendChild( stats.domElement );
+
+                        //cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
+                        cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
+                        cameraControls.target.set(0, 0, 0);
+
+                        // Events
+                        window.addEventListener('resize', onWindowResize, false);
+
+
+
+                        /*
+                        camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 						camera.position.set(20, 20, 20);
 						
 						scene = new THREE.Scene();
@@ -125,12 +260,17 @@ angular.module("modelViewer", [])
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.7);
 						elem[0].appendChild(renderer.domElement);
+
+                        // STATS
+                        stats = new Stats();
+                        elem[0].appendChild( stats.domElement );
 						
 						cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
         				cameraControls.target.set(0, 0, 0);
 
 						// Events
 						window.addEventListener('resize', onWindowResize, false);
+						*/
 					}
 
 					function onWindowResize(event) {
@@ -143,6 +283,7 @@ angular.module("modelViewer", [])
 						requestAnimationFrame(animate);
 						var delta = clock.getDelta();
         				cameraControls.update(delta);
+                        stats.update();
 						render();
 					}
 
@@ -155,7 +296,11 @@ angular.module("modelViewer", [])
 						//camera.lookAt(scene.position);
 						renderer.render(scene, camera);
 					}
-				}
+
+                    init();
+                    loadModel(scope.assimpUrl);
+                    animate();
+                }
 			}
 		}
 	]);
