@@ -2,22 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98b1fce9-af06-4978-85f5-f7360db60a7e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/.npmignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/.npmignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-ascii/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/.npmignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/node_modules/parse-stl-binary/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/parse-stl/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/slice1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/slice2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/slice3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/slice4.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/slice5.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="3Slice.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,11 +29,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.70846015">
+            <state vertical-scroll-proportion="0.0">
               <caret line="78" column="29" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.27134725">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -131,6 +132,7 @@
         <option value="$PROJECT_DIR$/views/main.html" />
         <option value="$PROJECT_DIR$/scripts/directives/modelViewer.js" />
         <option value="$PROJECT_DIR$/server.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -306,6 +308,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="3Slice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="3Slice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -321,6 +337,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Andy Roberts\WebstormProjects\3Slice\images" />
       <recent name="C:\Users\Andy Roberts\WebstormProjects\3Slice\node_modules\stl-models\objects" />
     </key>
   </component>
@@ -433,7 +450,13 @@
       <option name="project" value="LOCAL" />
       <updated>1449093897680</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added parse-stl&#10;">
+      <created>1449093982945</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1449093982945</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -489,7 +512,8 @@
     <MESSAGE value="basic slicing" />
     <MESSAGE value="added multi-slicing" />
     <MESSAGE value="added simplicial modules after setting&#10;git config --system core.longpaths true" />
-    <option name="LAST_COMMIT_MESSAGE" value="added simplicial modules after setting&#10;git config --system core.longpaths true" />
+    <MESSAGE value="added parse-stl&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="added parse-stl&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -572,8 +596,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70846015">
+        <state vertical-scroll-proportion="0.0">
           <caret line="78" column="29" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27134725">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding />
         </state>
       </provider>

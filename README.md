@@ -4,16 +4,9 @@ This node app loads stl files on the server, generates a mesh and sends the vert
 
 The app uses angular and wraps three.js as a directive.
 
-![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/pump.png)
-![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/bunny.png)
-![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/gearwheel.png)
-
-TODO:
-1.  serialize Float32Array values in binary form
-2.  generate server-side slices
-3.  better view manipulation and lighting
-4.  enable client side loading of stl files to server with persistence
-5.  lots more...
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice1.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice2.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice3.png)
 
 to run:
 1. node server.js
