@@ -9,6 +9,7 @@ The app uses angular and wraps three.js as a directive.
 ![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice3.png)
 ![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice4.png)
 ![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice5.png)
+![alt tag](https://raw.githubusercontent.com/andyroberts007/3Slice/basic-functionality/images/slice6.png)
 
 to run:
 1. node server.js
