@@ -181,17 +181,27 @@ angular.module("modelViewer", [])
                         dirLight.shadowBias = -0.0001;
                         //dirLight.shadowCameraVisible = true;
 
-                        var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
-                        var groundMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
-                        groundMat.color.setHSL( 0.095, 1, 0.75 );
+                        var groundGeo1 = new THREE.PlaneBufferGeometry( 10000, 10000 );
+                        var groundMat1 = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
+                        groundMat1.color.setHSL( 0.095, 1, 0.75 );
 
-                        var ground = new THREE.Mesh( groundGeo, groundMat );
+                        var ground1 = new THREE.Mesh( groundGeo1, groundMat1 );
                         // place ground normal to Z
-                        ground.rotation.x = -Math.PI/2;
-                        ground.position.y = -10;
-                        scene.add( ground );
+                        ground1.rotation.x = -Math.PI/2;
+                        ground1.position.y = -11;
+                        scene.add( ground1 );
 
-                        ground.receiveShadow = true;
+                        var groundGeo2 = new THREE.PlaneBufferGeometry( 100, 100 );
+                        var groundMat2 = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
+                        groundMat2.color.setHSL( 130, .09, .61 );
+
+                        var ground2 = new THREE.Mesh( groundGeo2, groundMat2 );
+                        // place ground normal to Z
+                        ground2.rotation.x = -Math.PI/2;
+                        ground2.position.y = -10;
+                        scene.add( ground2 );
+
+                        ground2.receiveShadow = true;
 
                         axes = buildAxes( 50 );
                         scene.add( axes );

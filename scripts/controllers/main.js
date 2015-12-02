@@ -2,17 +2,25 @@
 
 angular.module('3SliceApp')
 	.controller('MainCtrl', function ($scope) {
-		$scope.assimpModelUrl = "objects/gearwheel.ascii.stl";
+
+
+		var models = [];
+        models.push("objects/gearwheel.ascii.stl");
+        models.push("objects/pumphousing.stl");
+        models.push("objects/curvedhousing.stl");
+        models.push("objects/reducercasing.stl");
+        models.push("objects/pump.stl");
+        models.push("polytomes/cube.ascii.stl");
+
+        $scope.assimpModelUrl = models[0];
+
+        var modelCounter = 0;
 
 		$scope.changeModel = function() {
-			if ($scope.assimpModelUrl == "objects/gearwheel.ascii.stl") {
-				$scope.assimpModelUrl = "objects/pump.stl";
-			} else if ($scope.assimpModelUrl == "objects/pump.stl") {
-				$scope.assimpModelUrl = "polytopes/cube.ascii.stl";
-			} else if ($scope.assimpModelUrl == "polytopes/cube.ascii.stl") {
-				$scope.assimpModelUrl = "objects/bunny.bin.stl";
-			} else {
-				$scope.assimpModelUrl = "objects/gearwheel.ascii.stl";
-			}
+            modelCounter += 1;
+            if (modelCounter > models.length) {
+                modelCounter = 0;
+            }
+            $scope.assimpModelUrl = models[modelCounter];
 		};
 	});
