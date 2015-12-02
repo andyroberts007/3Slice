@@ -16,7 +16,9 @@ angular.module("modelViewer", [])
                     var stats;
 
 					var cameraControls;
-					var previous;
+					var previousMesh;
+                    var previousSlices = [];
+
 					var clock = new THREE.Clock();
 
 					// not used currently given the loadable models
@@ -51,9 +53,9 @@ angular.module("modelViewer", [])
 									
 					  var mesh = new THREE.Mesh(geometry, material);
 							 
-					  if (previous) scene.remove(previous);
+					  if (previousMesh) scene.remove(previousMesh);
 					  scene.add(mesh);
-					  previous = mesh;
+					  previousMesh = mesh;
 					};
  
 					function loadModel(modelUrl) {
@@ -65,15 +67,23 @@ angular.module("modelViewer", [])
 								if (response) {
 									var data = response.data;
 									var geometry = new THREE.BufferGeometry();
-									
-									var vertices = new Float32Array(data.vLength);
-									for (var i=0; i<data.vLength; i++) {
-										vertices[i] = data.vertices[i];
-									}
-									var normals = new Float32Array(data.nLength);
-									for (var i=0; i<data.nLength; i++) {
-										normals[i] = data.normals[i];
-									}
+
+                                    var vertices = new Float32Array(3*data.positions.length);
+                                    for (var i=0; i<data.positions.length; i++) {
+                                        var pos = data.positions[i];
+                                        vertices[3*i] = pos[0];
+                                        vertices[3*i+1] = pos[1];
+                                        vertices[3*i+2] = pos[2];
+                                    }
+                                    var normals = new Float32Array(3*data.vertexNormals.length);
+                                    for (var i=0; i<data.vertexNormals.length; i++) {
+                                        var nor = data.vertexNormals[i];
+                                        normals[3*i] = nor[0];
+                                        normals[3*i+1] = nor[1];
+                                        normals[3*i+2] = nor[2];
+                                    }
+                                    var slices = data.slices;
+
 									geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 									geometry.addAttribute('normal', new THREE.BufferAttribute(normals, 3));
 
@@ -90,17 +100,40 @@ angular.module("modelViewer", [])
                                     mesh.castShadow = true;
                                     mesh.receiveShadow = true;
 
+
+
+                                    for (var i=0; i<previousSlices.length; i++) {
+                                        scene.remove(previousSlices[i]);
+                                    }
+                                    previousSlices = [];
+                                    for (var i=0; i<slices.length; i++) {
+                                        var slicePoints = slices[i];
+                                        var sliceMaterial = new THREE.LineBasicMaterial({
+                                            color: 0xff0000
+                                        });
+                                        var sliceGeometry = new THREE.Geometry();
+                                        for (var j= 0; j<slicePoints.length; j++) {
+                                            var sp = slicePoints[j];
+                                            sliceGeometry.vertices.push(new THREE.Vector3(sp[0], sp[1], sp[2]));
+                                        }
+                                        var sliceProfile = new THREE.Line(sliceGeometry, sliceMaterial);
+                                        // rotate mesh so Z is vertical
+                                        sliceProfile.rotation.x = -Math.PI/2;
+                                        previousSlices.push(sliceProfile);
+                                        scene.add(sliceProfile);
+                                    }
+
                                     /*
                                     var mixer = new THREE.AnimationMixer( mesh );
                                     mixer.addAction( new THREE.AnimationAction( geometry.animations[ 0 ] ).warpToDuration( 1 ) );
                                     mixers.push( mixer );
                                     */
 
-									if (previous) {
-										scene.remove(previous);
+									if (previousMesh) {
+										scene.remove(previousMesh);
 									}
 									scene.add(mesh);
-									previous = mesh;
+									previousMesh = mesh;
 					            }
 							  }, function errorCallback(response) {
 							    
@@ -109,10 +142,10 @@ angular.module("modelViewer", [])
 							loader1.load(modelUrl, function (assimpjson) {
 								assimpjson.scale.x = assimpjson.scale.y = assimpjson.scale.z = 0.2;
 								assimpjson.updateMatrix();
-								if (previous) scene.remove(previous);
+								if (previousMesh) scene.remove(previousMesh);
 								scene.add(assimpjson);
 	
-								previous = assimpjson;
+								previousMesh = assimpjson;
 							});
 						}
 					};

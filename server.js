@@ -7,6 +7,7 @@ var http = require("http"),
     stlReader = require("stl-reader"),
     slicer = require("./slicer.js"),
     parseSTL = require('parse-stl'),
+    computeNormals = require("normals"),
     extractContour = require('simplicial-complex-contour'),
     port = process.argv[2] || 8090;
 
@@ -38,24 +39,30 @@ http.createServer(function(request, response) {
     } else {
 	  	var uri = url.parse(request.url).pathname;
 	  	if (uri.endsWith(".stl")) {
-	  		stlModels.getByPath(uri).then(function(file) {
-				var ab = toArrayBuffer(file);
-	    		var meshData = new stlReader().read(ab);
-	  			var mesh = new slicer.Mesh();
-	  			mesh.init(meshData);
-	  			response.writeHead(200);
-		      	response.write(JSON.stringify(mesh.toJson()), "binary");
-		      	response.end();
-			});
             var filename = path.join(process.cwd() + "/node_modules/stl-models/", uri);
-
             var buf = fs.readFileSync(filename);
             var mesh = parseSTL(buf);
             var zvalues = mesh.positions.map(function(p) {
                 return p[2]
             });
-            var curve = extractContour(mesh.cells, zvalues, 5.0);
-            var a = 5;
+            var curve = extractContour(mesh.cells, zvalues, 0);
+            var curveEdges = curve.cells;
+            var curvePositions = curve.vertexWeights.map(function(w,i) {
+                var a = mesh.positions[curve.vertexIds[i][0]]
+                var b = mesh.positions[curve.vertexIds[i][1]]
+                return [
+                    w * a[0] + (1 - w) * b[0],
+                    w * a[1] + (1 - w) * b[1],
+                    w * a[2] + (1 - w) * b[2]
+                ]
+            });
+            mesh.vertexNormals = computeNormals.vertexNormals(mesh.cells, mesh.positions);
+            var sm = new slicer.Mesh();
+            sm.init(mesh.positions, mesh.vertexNormals);
+            sm.addSlice(curvePositions);
+            response.writeHead(200);
+            response.write(JSON.stringify(sm.toJson()), "binary");
+            response.end();
 	  	} else {
 	  		var filename = path.join(process.cwd(), uri);
 	  		fs.exists(filename, function(exists) {
